@@ -28,7 +28,7 @@ export default function Transfers() {
     finally { setLoading(false); }
   };
 
-  useEffect(() => { fetchTransfers(); }, [filters]);
+  useEffect(() => { fetchTransfers(); }, [filters,fetchTransfers]);
 
   const handleSubmit = async () => {
     setError('');

@@ -30,7 +30,7 @@ export default function Assignments() {
     finally { setLoading(false); }
   };
 
-  useEffect(() => { fetchData(); }, []);
+  useEffect(() => { fetchData(); }, [fetchData]);
 
   const handleAssign = async () => {
     setError('');

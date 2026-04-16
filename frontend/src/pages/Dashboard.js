@@ -33,7 +33,7 @@ export default function Dashboard() {
     }
   };
 
-  useEffect(() => { fetchData(); }, [filterBase]);
+  useEffect(() => { fetchData(); }, [filterBase,fetchData]);
 
   if (loading) return <div className="flex-center" style={{ height: 300 }}>Loading...</div>;
   if (!summary) return null;

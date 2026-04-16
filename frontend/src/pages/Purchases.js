@@ -26,7 +26,7 @@ export default function Purchases() {
     finally { setLoading(false); }
   };
 
-  useEffect(() => { fetchPurchases(); }, [filters]);
+  useEffect(() => { fetchPurchases(); }, [filters,fetchPurchases]);
 
   const handleSubmit = async () => {
     setError('');

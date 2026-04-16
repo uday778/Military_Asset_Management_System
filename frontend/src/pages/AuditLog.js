@@ -31,7 +31,7 @@ export default function AuditLog() {
     finally { setLoading(false); }
   };
 
-  useEffect(() => { fetchLogs(); }, [filters]);
+  useEffect(() => { fetchLogs(); }, [filters,fetchLogs]);
 
   const actions = [...new Set(logs.map(l => l.action))];
   const entities = [...new Set(logs.map(l => l.entity))];

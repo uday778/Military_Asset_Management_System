@@ -24,7 +24,7 @@ export default function Assets() {
     finally { setLoading(false); }
   };
 
-  useEffect(() => { fetchAssets(); }, [filters]);
+  useEffect(() => { fetchAssets(); }, [filters,fetchAssets]);
 
   const handleSubmit = async () => {
     setError('');
