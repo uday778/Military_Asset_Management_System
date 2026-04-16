@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
-
-const TYPES = ['Vehicle', 'Weapon', 'Ammunition', 'Equipment', 'Supplies'];
-
-export default function Assignments() {
-  const { API, user } = useAuth();
+const { API, user } = useAuth();
   const [data, setData] = useState({ assignments: [], expenditures: [] });
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState('assignments');
@@ -21,6 +17,11 @@ export default function Assignments() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   import React, { useState, useEffect, useCallback } from 'react';
+
+const TYPES = ['Vehicle', 'Weapon', 'Ammunition', 'Equipment', 'Supplies'];
+
+export default function Assignments() {
+  
 
 const fetchData = useCallback(async () => {
   setLoading(true);
