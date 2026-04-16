@@ -16,7 +16,9 @@ export default function Dashboard() {
   const [filterBase, setFilterBase] = useState('');
   const [showNetModal, setShowNetModal] = useState(false);
 
- useEffect(() => {
+useEffect(() => {
+  let isMounted = true;
+
   const fetchData = async () => {
     setLoading(true);
     try {
@@ -27,17 +29,23 @@ export default function Dashboard() {
         axios.get(`${API}/dashboard/net-movement`, { params }),
       ]);
 
-      setSummary(sumRes.data);
-      setNetMovement(netRes.data);
+      if (isMounted) {
+        setSummary(sumRes.data);
+        setNetMovement(netRes.data);
+      }
     } catch (err) {
       console.error(err);
     } finally {
-      setLoading(false);
+      if (isMounted) setLoading(false);
     }
   };
 
   fetchData();
-}, [filterBase]);
+
+  return () => {
+    isMounted = false;
+  };
+}, [filterBase, API]);
 
   if (loading) return <div className="flex-center" style={{ height: 300 }}>Loading...</div>;
   if (!summary) return null;

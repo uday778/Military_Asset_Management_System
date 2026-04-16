@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
-
+import React, { useState, useEffect, useCallback } from 'react';
 const TYPES = ['Vehicle', 'Weapon', 'Ammunition', 'Equipment', 'Supplies'];
 
 export default function Purchases() {
@@ -17,26 +17,26 @@ export default function Purchases() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
- useEffect(() => {
-  const fetchPurchases = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.get(`${API}/purchases`, { params: filters });
-      setPurchases(res.data);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+const fetchPurchases = useCallback(async () => {
+  setLoading(true);
+  try {
+    const res = await axios.get(`${API}/purchases`, { params: filters });
+    setPurchases(res.data);
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setLoading(false);
+  }
+}, [API, filters]);
+useEffect(() => {
   fetchPurchases();
-}, [filters]);
+}, [fetchPurchases]);
 
   const handleSubmit = async () => {
     setError('');
     try {
       await axios.post(`${API}/purchases`, form);
+await fetchPurchases();
       setSuccess('Purchase recorded successfully');
       setShowModal(false);
       setForm({ assetName: '', type: 'Weapon', base: user.base || '', quantity: '', unitCost: '', supplier: '', purchaseDate: new Date().toISOString().split('T')[0], notes: '' });

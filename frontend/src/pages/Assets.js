@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import React, { useState, useEffect, useCallback } from 'react';
 
 const TYPES = ['Vehicle', 'Weapon', 'Ammunition', 'Equipment', 'Supplies'];
 const STATUSES = ['Operational', 'Maintenance', 'Decommissioned'];
@@ -15,21 +16,20 @@ export default function Assets() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  useEffect(() => {
-  const fetchAssets = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.get(`${API}/assets`, { params: filters });
-      setAssets(res.data);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+const fetchAssets = useCallback(async () => {
+  setLoading(true);
+  try {
+    const res = await axios.get(`${API}/assets`, { params: filters });
+    setAssets(res.data);
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setLoading(false);
+  }
+}, [API, filters]);
+useEffect(() => {
   fetchAssets();
-}, [filters]);
+}, [fetchAssets]);
 
   const handleSubmit = async () => {
     setError('');

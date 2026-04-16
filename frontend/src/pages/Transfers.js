@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
-
+import React, { useState, useEffect, useCallback } from 'react';
 const TYPES = ['Vehicle', 'Weapon', 'Ammunition', 'Equipment', 'Supplies'];
 const BASES = ['Alpha Base', 'Bravo Base', 'Charlie Base', 'HQ', 'Forward Operating Base'];
 
@@ -19,26 +19,26 @@ export default function Transfers() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
- useEffect(() => {
-  const fetchTransfers = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.get(`${API}/transfers`, { params: filters });
-      setTransfers(res.data);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+ const fetchTransfers = useCallback(async () => {
+  setLoading(true);
+  try {
+    const res = await axios.get(`${API}/transfers`, { params: filters });
+    setTransfers(res.data);
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setLoading(false);
+  }
+}, [API, filters]);
+useEffect(() => {
   fetchTransfers();
-}, [filters]);
+}, [fetchTransfers]);
 
   const handleSubmit = async () => {
     setError('');
     try {
       await axios.post(`${API}/transfers`, form);
+await fetchTransfers();
       setSuccess('Transfer request submitted');
       setShowModal(false);
       setForm({ assetName: '', type: 'Weapon', fromBase: user.base || '', toBase: '', quantity: '', notes: '' });
@@ -49,15 +49,15 @@ export default function Transfers() {
 
   const handleApprove = async (id) => {
     try {
-      await axios.patch(`${API}/transfers/${id}/approve`);
-      fetchTransfers();
+      await axios.post(`${API}/transfers`, form);
+await fetchTransfers();
     } catch (err) { alert(err.response?.data?.message || 'Error approving transfer'); }
   };
 
   const handleReject = async (id) => {
     try {
       await axios.patch(`${API}/transfers/${id}/reject`);
-      fetchTransfers();
+await fetchTransfers();
     } catch (err) { alert(err.response?.data?.message || 'Error rejecting transfer'); }
   };
 

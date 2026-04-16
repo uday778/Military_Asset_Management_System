@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import React, { useState, useEffect, useCallback } from 'react';
 
 const ACTION_COLORS = {
   LOGIN: 'badge-blue',
@@ -22,21 +23,21 @@ export default function AuditLog() {
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({ action: '', entity: '', performedBy: '', limit: 100 });
 
-  useEffect(() => {
-  const fetchLogs = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.get(`${API}/audit`, { params: filters });
-      setLogs(res.data);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const fetchLogs = useCallback(async () => {
+  setLoading(true);
+  try {
+    const res = await axios.get(`${API}/audit`, { params: filters });
+    setLogs(res.data);
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setLoading(false);
+  }
+}, [API, filters]);
 
+useEffect(() => {
   fetchLogs();
-}, [filters]);
+}, [fetchLogs]);
 
   const actions = [...new Set(logs.map(l => l.action))];
   const entities = [...new Set(logs.map(l => l.entity))];
