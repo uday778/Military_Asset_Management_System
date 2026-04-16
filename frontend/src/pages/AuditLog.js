@@ -22,16 +22,21 @@ export default function AuditLog() {
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({ action: '', entity: '', performedBy: '', limit: 100 });
 
+  useEffect(() => {
   const fetchLogs = async () => {
     setLoading(true);
     try {
       const res = await axios.get(`${API}/audit`, { params: filters });
       setLogs(res.data);
-    } catch (err) { console.error(err); }
-    finally { setLoading(false); }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  useEffect(() => { fetchLogs(); }, [filters,fetchLogs]);
+  fetchLogs();
+}, [filters]);
 
   const actions = [...new Set(logs.map(l => l.action))];
   const entities = [...new Set(logs.map(l => l.entity))];

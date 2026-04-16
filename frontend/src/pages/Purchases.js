@@ -17,16 +17,21 @@ export default function Purchases() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
+ useEffect(() => {
   const fetchPurchases = async () => {
     setLoading(true);
     try {
       const res = await axios.get(`${API}/purchases`, { params: filters });
       setPurchases(res.data);
-    } catch (err) { console.error(err); }
-    finally { setLoading(false); }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  useEffect(() => { fetchPurchases(); }, [filters,fetchPurchases]);
+  fetchPurchases();
+}, [filters]);
 
   const handleSubmit = async () => {
     setError('');

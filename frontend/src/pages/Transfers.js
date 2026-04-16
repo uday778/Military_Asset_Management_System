@@ -19,16 +19,21 @@ export default function Transfers() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
+ useEffect(() => {
   const fetchTransfers = async () => {
     setLoading(true);
     try {
       const res = await axios.get(`${API}/transfers`, { params: filters });
       setTransfers(res.data);
-    } catch (err) { console.error(err); }
-    finally { setLoading(false); }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  useEffect(() => { fetchTransfers(); }, [filters,fetchTransfers]);
+  fetchTransfers();
+}, [filters]);
 
   const handleSubmit = async () => {
     setError('');

@@ -21,16 +21,21 @@ export default function Assignments() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
+  useEffect(() => {
   const fetchData = async () => {
     setLoading(true);
     try {
       const res = await axios.get(`${API}/assignments`);
       setData(res.data);
-    } catch (err) { console.error(err); }
-    finally { setLoading(false); }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  useEffect(() => { fetchData(); }, [fetchData]);
+  fetchData();
+}, []);
 
   const handleAssign = async () => {
     setError('');

@@ -15,16 +15,21 @@ export default function Assets() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
+  useEffect(() => {
   const fetchAssets = async () => {
     setLoading(true);
     try {
       const res = await axios.get(`${API}/assets`, { params: filters });
       setAssets(res.data);
-    } catch (err) { console.error(err); }
-    finally { setLoading(false); }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  useEffect(() => { fetchAssets(); }, [filters,fetchAssets]);
+  fetchAssets();
+}, [filters]);
 
   const handleSubmit = async () => {
     setError('');
